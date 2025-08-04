@@ -31,16 +31,51 @@ from image_utils.blur import apply_gaussian_blur, apply_motion_blur, apply_box_b
 from image_utils.shaky import simulate_shaky, simulate_directional_shake  # Camera shake simulation
 from image_utils.motion import simulate_motion_distortion, simulate_zoom_motion  # Motion effects
 
-# Background removal imports with graceful fallback handling
-# This allows the app to run even if rembg is not installed, with appropriate UI feedback
+# Background removal imports with enhanced error handling and debugging
+# This allows the app to run even if rembg is not installed, with detailed feedback
+REMBG_AVAILABLE = False
+REMBG_ERROR_MESSAGE = None
+rembg_remove = None
+new_session = None
+
 try:
+    # First, test basic rembg import
+    import rembg
+    print(f"✅ rembg imported successfully - version: {getattr(rembg, '__version__', 'unknown')}")
+    
+    # Test specific function imports
     from rembg import remove as rembg_remove, new_session
-    REMBG_AVAILABLE = True  # Flag to indicate rembg functionality is available
-except ImportError:
-    # Fallback when rembg is not installed - disable related functionality
+    print("✅ rembg functions imported successfully")
+    
+    # Test if we can create a basic session (this is where many deployments fail)
+    try:
+        test_session = new_session('u2net')
+        print("✅ rembg model session test successful")
+        REMBG_AVAILABLE = True
+    except Exception as session_error:
+        print(f"❌ rembg model session failed: {session_error}")
+        REMBG_ERROR_MESSAGE = f"Model loading failed: {str(session_error)}"
+        # Keep functions available but flag the model issue
+        REMBG_AVAILABLE = False
+        
+except ImportError as import_error:
+    print(f"❌ rembg import failed: {import_error}")
+    REMBG_ERROR_MESSAGE = f"Import failed: {str(import_error)}"
     REMBG_AVAILABLE = False
     rembg_remove = None
     new_session = None
+except Exception as general_error:
+    print(f"❌ rembg general error: {general_error}")
+    REMBG_ERROR_MESSAGE = f"General error: {str(general_error)}"
+    REMBG_AVAILABLE = False
+    rembg_remove = None
+    new_session = None
+
+# Print final status for debugging
+if REMBG_AVAILABLE:
+    print("🎉 rembg is fully available and ready")
+else:
+    print(f"❌ rembg is not available: {REMBG_ERROR_MESSAGE}")
 
 
 class BackgroundRemovalManager:
@@ -292,7 +327,7 @@ class PreviewManager:
 
 
 def load_image(uploaded_file):
-    """Load and convert uploaded image to numpy array."""
+    """Load and convert uploaded file to numpy array."""
     image = Image.open(uploaded_file)
     image_array = np.array(image)
     return image_array
@@ -537,9 +572,21 @@ def show_bg_removal_page():
     st.title("✂️ AI Background Removal")
     st.markdown("Remove backgrounds from your images using advanced AI models.")
     
-    # Check rembg availability
+    # Check rembg availability with detailed error information
     if not REMBG_AVAILABLE:
-        st.error("❌ **rembg library not installed**")
+        st.error("❌ **rembg library not available**")
+        
+        # Show specific error details if available
+        if REMBG_ERROR_MESSAGE:
+            st.error(f"**Error Details:** {REMBG_ERROR_MESSAGE}")
+        
+        # Add a diagnostic button
+        if st.button("🔍 Run rembg Diagnostics"):
+            st.code("""
+            # Run this in your terminal to debug rembg installation:
+            python debug_rembg.py
+            """)
+        
         st.markdown("""
         **Installation Required:**
         ```bash
@@ -549,7 +596,17 @@ def show_bg_removal_page():
         ```bash
         pip install rembg[gpu]
         ```
-        Please install the required library and restart the application.
+        
+        **Troubleshooting Steps:**
+        1. **Force reinstall:** `pip uninstall rembg && pip install rembg`
+        2. **Check system dependencies:** Make sure packages.txt includes all required libraries
+        3. **Clear Streamlit cache:** Force redeploy your app
+        4. **Run diagnostics:** Use the debug script provided in your repository
+        
+        **Common Issues:**
+        - Missing system libraries (libgl1-mesa-glx, libglib2.0-0, etc.)
+        - Incomplete model downloads
+        - Version conflicts with other packages
         """)
         return
     
