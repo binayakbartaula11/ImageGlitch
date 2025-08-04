@@ -158,6 +158,18 @@ For a complete overview of all available documentation, visit the **[docs direct
 4. **Process Full Quality** - Generate high-resolution output
 5. **Download Results** - PNG, JPEG, and original image options
 
+## 📸 Example Screenshots
+
+Here are some screenshots demonstrating ImageGlitch's core features and UI:
+
+| Custom Background Color                                  | White Background                                       | Image Glitch Effect (Mercedes 300SL)                   |
+| ------------------------------------------------------- | ----------------------------------------------------- | ------------------------------------------------------ |
+| ![Custom Background](screenshots/background_removal_selected_bgcolor.png) | ![White Background](screenshots/background_removal_selected_whitebackground.png) | ![Glitch Effect](screenshots/mercedes-300-SL-imageglitch.png) |
+
+These images illustrate background removal with custom and white backgrounds, as well as the glitch effect output.
+
+---
+
 ## 🛠️ Technologies Used
 
 - **[Streamlit](https://streamlit.io/)** - Web application framework
