@@ -26,6 +26,20 @@ import requests
 import re
 from urllib.parse import urlparse
 from typing import Tuple, Dict, Any
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Test onnxruntime import for debugging
+try:
+    import onnxruntime
+    logger.info("✅ onnxruntime imported successfully")
+except ImportError as e:
+    logger.error(f"❌ Failed to import onnxruntime: {e}")
+except Exception as e:
+    logger.error(f"❌ onnxruntime error: {e}")
 
 # Import custom image effect utilities from modular packages
 from image_utils.noise import add_gaussian_noise, add_salt_pepper_noise  # Noise generation effects
