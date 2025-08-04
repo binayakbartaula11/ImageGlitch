@@ -30,7 +30,20 @@
 
 ### Cloud Deployment
 
-For deploying on cloud platforms, consider using a service such as AWS EC2, Heroku, or Google Cloud Platform. Make sure to configure your domain and firewall settings to allow access to the Streamlit application port.
+#### Streamlit Cloud
+ImageGlitch is optimized for Streamlit Cloud deployment with pre-configured files:
+
+- **requirements.txt**: All Python dependencies with pinned versions
+- **packages.txt**: System libraries for OpenCV and image processing
+- **runtime.txt**: Python 3.9.18 for optimal compatibility
+- **.streamlit/config.toml**: Streamlit-specific configurations
+
+#### Other Cloud Platforms
+For deployment on AWS EC2, Heroku, or Google Cloud Platform:
+1. Use the provided `runtime.txt` for Python version specification
+2. Install system packages listed in `packages.txt`
+3. Configure firewall settings to allow access to port 8501
+4. Set environment variables as needed for model storage
 
 ## System Requirements
 
@@ -44,10 +57,11 @@ For deploying on cloud platforms, consider using a service such as AWS EC2, Hero
 
 ### Recommended Configuration
 
-- **Python Version**: 3.9+
+- **Python Version**: 3.9+ (3.9.18 specified in runtime.txt)
 - **RAM**: 8GB or more
 - **GPU**: NVIDIA GPU with CUDA support (optional)
 - **Storage**: 2GB+
+- **System Libraries**: Listed in packages.txt for OpenCV support
 
 ## Quick Start Example
 

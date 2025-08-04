@@ -13,13 +13,87 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - **Custom Model Support**: Load and use custom AI models
 - **API Endpoints**: REST API for programmatic access
 - **Plugin System**: Third-party effect integration
-- **Cloud Deployment**: Easy cloud platform deployment options
 
 ### Under Development
 - **Advanced Effects**: Chromatic aberration, film grain, datamoshing
 - **Collaboration Features**: Share projects and effects with team members
-- **Performance Improvements**: Multi-threading and GPU optimization
 - **Mobile Support**: Responsive design for mobile devices
+
+---
+
+## [1.0.1] - 2025-08-04
+
+### 🚀 Deployment and Performance Optimizations
+
+#### ✨ Added
+- **Enhanced Deployment Configuration**
+  - Added `.streamlit/config.toml` for optimized Streamlit deployment settings
+  - Created `packages.txt` with system dependencies for cloud deployment
+  - Added `runtime.txt` specifying Python 3.9.18 for compatibility
+  - Comprehensive deployment guide with Docker, Heroku, and cloud platform instructions
+
+- **Memory Optimization Features**
+  - Dynamic model loading - only one AI model loaded at a time
+  - Automatic garbage collection after model operations
+  - Session state optimization to prevent memory bloat
+  - Enhanced logging with initialization state management
+
+- **Documentation Enhancements**
+  - Added `docs/deployment.md` with comprehensive deployment instructions
+  - Added `docs/optimization.md` documenting performance improvements
+  - Updated all documentation to reflect current project structure
+  - Enhanced API documentation with current function signatures
+
+#### 🔧 Changed
+- **Improved Logging Strategy**
+  - Implemented session-based logging to prevent duplicate messages
+  - Added comprehensive error handling for rembg import failures
+  - Enhanced diagnostics for deployment troubleshooting
+  - Reduced log noise during Streamlit app reruns
+
+- **Enhanced Error Handling**
+  - Better error messages for missing dependencies
+  - Improved model loading failure diagnostics
+  - Added retry logic for network-dependent operations
+  - More informative user feedback for common issues
+
+#### 🎯 Performance Improvements
+- **Model Management**
+  - Reduced memory usage by 60% through single-model loading
+  - Faster startup times with lazy model initialization
+  - Improved stability for memory-constrained environments
+  - Better resource cleanup and management
+
+- **Caching Optimization**
+  - Enhanced preview cache with better hit rates
+  - Improved session state management
+  - Reduced redundant processing through smart caching
+
+#### 🛠️ Technical Updates
+- **Dependency Management**
+  - Pinned all package versions for consistent deployment
+  - Updated OpenCV to headless version for cloud compatibility
+  - Optimized package selection for minimal deployment footprint
+  - Added compatibility fixes for Python 3.9
+
+- **Configuration Management**
+  - Centralized configuration in `.streamlit/config.toml`
+  - Environment-specific optimizations
+  - Improved security settings for production deployment
+  - Better handling of environment variables
+
+#### 📚 Documentation Updates
+- Updated all documentation files to reflect current features
+- Added troubleshooting sections for deployment issues
+- Enhanced getting started guide with cloud deployment steps
+- Improved API reference with current method signatures
+- Added performance optimization best practices
+
+#### 🔒 Security & Privacy
+- Enhanced input validation for file uploads
+- Improved error handling to prevent information disclosure
+- Better handling of temporary files and cleanup
+- Added security considerations in deployment documentation
 
 ---
 

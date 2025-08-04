@@ -192,18 +192,49 @@ DEFAULT_OUTPUT_FORMAT = 'PNG'
 
 ## 🎯 UI Customization
 
-### Theme Configuration
+### Streamlit Configuration (.streamlit/config.toml)
 
-Create a custom theme by modifying Streamlit configuration:
+The project includes a `.streamlit/config.toml` file for deployment optimization:
 
 ```toml
-# .streamlit/config.toml
+# Basic Streamlit configuration
+# Note: runner.installMethod is deprecated and has been removed
+
+[server]
+headless = true
+port = 8501
+enableCORS = false
+enableWebsocketCompression = false
+
 [theme]
 primaryColor = "#4F8BF9"
 backgroundColor = "#FFFFFF" 
 secondaryBackgroundColor = "#F0F2F6"
 textColor = "#262730"
 font = "sans serif"
+
+[browser]
+gatherUsageStats = false
+```
+
+### Deployment Configuration Files
+
+#### runtime.txt
+Specifies Python version for cloud deployment:
+```
+python-3.9.18
+```
+
+#### packages.txt
+System packages required for OpenCV and image processing:
+```
+libgl1-mesa-glx
+libgl1
+libglib2.0-0
+libsm6
+libxext6
+libxrender-dev
+libgomp1
 ```
 
 ### Page Layout Settings

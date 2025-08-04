@@ -6,9 +6,13 @@ Welcome to the Developer Guide. This document is intended for developers interes
 
 ```plaintext
 ImageGlitch/
-├── app.py                 # Main Streamlit application
-├── requirements.txt          # Python dependencies
+├── app.py                   # Main Streamlit application
+├── requirements.txt         # Python dependencies with pinned versions
+├── packages.txt             # System packages for cloud deployment
+├── runtime.txt              # Python version specification (3.9.18)
 ├── WHITEPAPER.md            # Technical whitepaper and implementation details
+├── .streamlit/              # Streamlit configuration for deployment
+│   └── config.toml          # Streamlit-specific settings
 ├── image_utils/             # Image processing utilities
 │   ├── __init__.py          # Package initialization
 │   ├── blur.py              # Blur effects (Gaussian, Motion, Box)
@@ -21,11 +25,17 @@ ImageGlitch/
 │   ├── getting-started.md   # Installation and quick setup
 │   ├── user-guide.md        # Complete usage instructions
 │   ├── configuration.md     # Settings and customization
+│   ├── deployment.md        # Deployment guide for various platforms
+│   ├── optimization.md      # Performance optimization strategies
 │   ├── developer-guide.md   # Development and contribution guide
 │   ├── api-reference.md     # Technical API documentation
 │   ├── faq.md               # FAQ and troubleshooting
 │   └── changelog.md         # Version history and updates
-└── README.md                # Main project README
+├── screenshots/             # Visual assets and demo images
+│   ├── background_removal_selected_bgcolor.png
+│   ├── background_removal_selected_whitebackground.png
+│   └── mercedes-300-SL-imageglitch.png
+└── README.md                # Main project overview
 ```
 
 ## 🗂️ Key Components
@@ -77,10 +87,19 @@ Contains the core image processing modules:
    pip install -r requirements.txt
    ```
 
-4. **Run the application for development**:
+4. **Install system dependencies** (if developing locally on Linux/WSL):
+   ```bash
+   # Install packages listed in packages.txt
+   sudo apt-get update
+   sudo apt-get install libgl1-mesa-glx libgl1 libglib2.0-0 libsm6 libxext6 libxrender-dev libgomp1
+   ```
+
+5. **Run the application for development**:
    ```bash
    streamlit run app.py
    ```
+
+   The application will be available at `http://localhost:8501`
 
 ### Testing and Debugging
 

@@ -1,6 +1,6 @@
 # 🎨 ImageGlitch Documentation
 
-Welcome to the comprehensive documentation for ImageGlitch - an AI-powered image manipulation suite that combines advanced background removal with real-time creative effects.
+Welcome to the comprehensive documentation for ImageGlitch - an AI-powered image manipulation suite that combines advanced background removal with real-time creative effects. This documentation covers all aspects of installation, usage, deployment, and development.
 
 ## 📚 Documentation Structure
 
@@ -12,6 +12,8 @@ Welcome to the comprehensive documentation for ImageGlitch - an AI-powered image
 | **🚀 Getting Started** | Installation and quick setup | [Getting Started](getting-started.md) |
 | **📖 User Guide** | Complete usage instructions | [User Guide](user-guide.md) |
 | **⚙️ Configuration** | Settings and customization | [Configuration](configuration.md) |
+| **🚀 Deployment** | Cloud, Docker, and platform deployment | [Deployment Guide](deployment.md) |
+| **⚡ Optimization** | Performance tuning and memory management | [Optimization Guide](optimization.md) |
 | **👨‍💻 Developer Guide** | Development and contribution | [Developer Guide](developer-guide.md) |
 | **🔧 API Reference** | Technical API documentation | [API Reference](api-reference.md) |
 | **❓ FAQ & Troubleshooting** | Common issues and solutions | [FAQ](faq.md) |
