@@ -1,23 +1,12 @@
-<<<<<<< HEAD
-streamlit==1.28.0
-rembg==2.0.50
-=======
 streamlit==1.47.1
 rembg==2.0.67
->>>>>>> 271dcdd265416fa43b38f2afe4af01608aa6972b
-numpy==1.24.3
-pillow==10.0.1
-opencv-python-headless==4.8.1.78
-scikit-image==0.21.0
-tqdm==4.66.1
-<<<<<<< HEAD
-onnxruntime==1.15.1
+numpy==2.2.6
+pillow==11.3.0
+opencv-python-headless==4.12.0.88
+scikit-image==0.25.2
+tqdm==4.67.1
+numba==0.61.2
+llvmlite==0.44.0
+onnxruntime==1.20.1
 requests==2.31.0
 urllib3==2.0.7
-numba==0.57.1
-llvmlite==0.40.1
-=======
-onnxruntime==1.16.3
-requests==2.31.0
-urllib3==2.0.7
->>>>>>> 271dcdd265416fa43b38f2afe4af01608aa6972b
