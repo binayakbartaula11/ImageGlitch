@@ -15,12 +15,22 @@
 - **Multiple Model Support** - U2-Net, IS-Net, and Silueta models for different use cases
 - **High-Quality Processing** - Preserve image details with advanced AI algorithms
 - **Dual Input Support** - Upload files or paste image URLs directly (.jpg, .png, .webp, etc.)
+- **Dynamic Model Loading** - Lazy loading with automatic memory management
+- **Pre-bundled Model Support** - Optional local model storage for offline deployment
 
 ### 🎨 Real-Time Image Glitch Effects
 - **Live Preview System** - See effects instantly as you adjust parameters
 - **Multiple Effect Categories** - Noise, blur, shake, and motion effects
 - **Extreme Mode** - Unlock high-intensity parameters for dramatic results
 - **Smart Performance** - Intelligent caching and quality modes for smooth operation
+- **Session State Optimization** - Persistent user experience with memory-efficient storage
+
+### 🚀 Performance Optimizations
+- **Memory Management** - Dynamic model loading prevents memory overflow
+- **Intelligent Caching** - Preview cache system with hash-based optimization
+- **Deployment Stability** - Enhanced error handling and logging for cloud environments
+- **Session State Management** - Suppressed redundant logging and efficient state persistence
+- **Garbage Collection** - Automatic cleanup of unused models and resources
 
 ## 🚀 Quick Start
 
@@ -50,10 +60,54 @@ pip install rembg[gpu]
 ### Launch the Application
 
 ```bash
-streamlit run app.py.py
+streamlit run app.py
 ```
 
 The application will open in your browser at `http://localhost:8501`
+
+### Deployment Options
+
+#### Local Development
+For local development with auto-reload:
+```bash
+streamlit run app.py --server.runOnSave true
+```
+
+#### Cloud Deployment (Streamlit Cloud/Heroku)
+The application is optimized for cloud deployment with:
+- **Automatic dependency management** - All required packages in requirements.txt
+- **System library support** - packages.txt for system dependencies
+- **Memory optimization** - Dynamic model loading prevents memory overflow
+- **Error recovery** - Comprehensive logging for deployment diagnostics
+- **Python 3.9 compatibility** - Specified in runtime.txt for maximum compatibility
+
+#### Docker Deployment
+For containerized deployment:
+```dockerfile
+# Use Python 3.9 for optimal compatibility
+FROM python:3.9-slim
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# Copy application
+COPY . /app
+WORKDIR /app
+
+# Run application
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+```
 
 ## 📚 Documentation
 
@@ -117,8 +171,8 @@ For a complete overview of all available documentation, visit the **[docs direct
 
 ```
 ImageGlitch/
-├── app.py               # Main Streamlit application
-├── requirements.txt        # Python dependencies
+├── app.py                 # Main Streamlit application
+├── requirements.txt       # Python dependencies
 ├── WHITEPAPER.md          # Technical whitepaper and implementation details
 ├── image_utils/           # Image processing utilities
 │   ├── __init__.py        # Package initialization
@@ -135,12 +189,18 @@ ImageGlitch/
 │   ├── developer-guide.md # Development and contribution guide
 │   ├── api-reference.md   # Technical API documentation
 │   ├── faq.md             # FAQ and troubleshooting
+│   ├── deployment.md      # Guide for deploying the project in different environments
+│   └── optimization.md    # Document detailing optimizations and performance tuning
 │   └── changelog.md       # Version history and updates
-├── screenshots/                                            # 📸 All visual assets and demo images
+├── screenshots/                                            # All visual assets and demo images
 │   ├── background_removal_selected_bgcolor.png             # Background removed with selected color
 │   ├── background_removal_selected_whitebackground.png     # Background removed with white
-│   ├── mercedes-300-SL-imageglitch.png                      # ImageGlitch output (Mercedes 300SL)
-└── README.md              # Main project overview
+│   ├── mercedes-300-SL-imageglitch.png                     # ImageGlitch output (Mercedes 300SL)
+├── .streamlit/           # Streamlit configuration files and deployment settings
+│   ├── config.toml       # Streamlit config file
+├── packages.txt          # List of required packages for the project (customized)
+├── runtime.txt           # Environment and runtime specifications for deployment
+└── README.md             # Main project overview
 ```
 
 ## 🔧 System Requirements
@@ -217,44 +277,72 @@ This project would not have reached peak glitchiness without Claude, Warp, and T
 - **[OpenCV](https://opencv.org/)** - Comprehensive computer vision library
 - **U2-Net, IS-Net, Silueta models** - Powerful AI models for background segmentation
 
-## 📊 Performance Tips
+## 🚀 Deployment and Performance
 
-### For Better Performance
+### Cloud Deployment Configuration
+ImageGlitch includes optimized configuration files for seamless deployment:
+
+- **runtime.txt**: Specifies Python 3.9.18 for maximum compatibility
+- **packages.txt**: System dependencies for OpenCV and image processing
+- **.streamlit/config.toml**: Streamlit-specific deployment settings
+- **requirements.txt**: Pinned Python package versions
+
+### Performance Optimization Features
+- **Dynamic Model Loading**: Only one AI model loaded at a time to prevent memory overflow
+- **Intelligent Caching**: Hash-based preview system reduces redundant processing
+- **Session State Management**: Optimized for Streamlit to prevent memory bloat
+- **Automatic Garbage Collection**: Explicit cleanup of unused models and resources
+
+### Performance Tips
 - Use **Fast preview mode** for real-time adjustments
 - Enable **Auto Preview** for immediate feedback
 - Process **full quality** only when satisfied with preview
 - Use **GPU acceleration** if available (install `rembg[gpu]`)
-
-### For Large Images
-- Consider resizing very large images before processing
-- Use **Balanced** or **Fast** preview modes
-- Process background removal first, then apply glitch effects
 - Monitor system memory usage during processing
 
 ## 🐛 Troubleshooting
 
-### Common Issues
+### Installation Issues
 
 **"rembg library not installed"**
 ```bash
 pip install rembg
 ```
 
+**System library missing (Linux/WSL)**
+```bash
+sudo apt-get install libgl1-mesa-glx libgl1 libglib2.0-0 libsm6 libxext6 libxrender-dev libgomp1
+```
+
+### Performance Issues
+
 **Out of memory errors**
 - Reduce image size before processing
 - Use Fast preview mode
 - Close other applications to free RAM
+- Only one AI model loads at a time (memory optimization)
 
 **Slow processing**
 - Update to latest versions of dependencies
 - Use GPU acceleration if available
 - Reduce preview quality for faster feedback
+- Use Silueta model for fastest processing
+
+### Deployment Issues
+
+**Cloud deployment failures**
+- Ensure Python 3.9.18 specified in runtime.txt
+- Verify all system packages listed in packages.txt
+- Check .streamlit/config.toml for proper settings
+- Review deployment logs for specific error messages
 
 ## 📚 Additional Resources
 
 - **[📝 Technical Whitepaper](WHITEPAPER.md)** - Deep dive into implementation details and algorithms
 - **[📖 Complete Documentation](docs/)** - User guides, API reference, and developer resources
 - **[🚀 Getting Started Guide](docs/getting-started.md)** - Quick setup and first steps
+- **[🌍 Deployment Guide](docs/deployment.md)** - Cloud, Docker, and platform deployment instructions
+- **[⚡ Optimization Guide](docs/optimization.md)** - Performance tuning and memory management
 
 ## 📧 Contact & Support
 
