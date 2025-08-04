@@ -6,7 +6,7 @@
 
 **Author:** Binayak Bartaula  
 **Date:** August 2025  
-**Version:** 1.0  
+**Version:** 1.0.1  
 **Repository:** [github.com/binayakbartaula11/ImageGlitch](https://github.com/binayakbartaula11/ImageGlitch)
 
 ---
@@ -15,7 +15,7 @@
 
 ImageGlitch represents a comprehensive image processing suite that combines advanced AI-powered background removal with real-time artistic image manipulation capabilities. The system integrates multiple specialized neural networks for precise background segmentation with a modular effects pipeline for creative image distortion. Built on modern web technologies with a focus on user experience, ImageGlitch provides both professional-grade background removal tools and creative glitch effects through an intuitive real-time interface.
 
-The platform addresses critical gaps in existing image processing workflows by offering specialized AI models for different image types while maintaining real-time preview capabilities for creative effects. Performance optimizations including intelligent caching, lazy model loading, and adaptive quality modes ensure responsive user interaction across various hardware configurations.
+The platform addresses critical gaps in existing image processing workflows by offering specialized AI models for different image types while maintaining real-time preview capabilities for creative effects. Advanced performance optimizations including intelligent caching, dynamic model loading with automatic garbage collection, session state optimization, and adaptive quality modes ensure responsive user interaction across various hardware configurations. Enhanced deployment architecture with cloud-optimized configurations enables seamless deployment across multiple platforms.
 
 ## 1. Introduction
 
@@ -87,11 +87,14 @@ ImageGlitch Architecture
 ├── Frontend Layer (Streamlit)
 │   ├── Multi-page Navigation System
 │   ├── Real-time Parameter Controls
-│   └── Responsive Preview Interface
+│   ├── Responsive Preview Interface
+│   └── Enhanced Logging System
 ├── Processing Layer
 │   ├── Background Removal Manager
-│   │   ├── Model Session Management
-│   │   ├── Lazy Loading System
+│   │   ├── Dynamic Model Session Management
+│   │   ├── Lazy Loading System with Memory Optimization
+│   │   ├── Automatic Garbage Collection
+│   │   ├── Pre-bundled Model Support
 │   │   └── Output Format Handler
 │   ├── Effects Pipeline
 │   │   ├── Noise Processors (Gaussian, Salt & Pepper)
@@ -101,11 +104,18 @@ ImageGlitch Architecture
 │   └── Performance Management
 │       ├── Preview Quality Manager
 │       ├── Intelligent Caching System
-│       └── Effect Hash Generator
+│       ├── Effect Hash Generator
+│       └── Memory Management System
 └── Data Layer
-    ├── Session State Management
-    ├── Model Storage Cache
-    └── Preview Cache System
+    ├── Optimized Session State Management
+    ├── Model Storage Cache with Cleanup
+    ├── Preview Cache System
+    ├── Deployment Environment Detection
+    └── Configuration Management
+        ├── Streamlit Configuration (.streamlit/config.toml)
+        ├── System Dependencies (packages.txt)
+        ├── Runtime Specification (runtime.txt)
+        └── Environment Variables Management
 ```
 
 ### 3.2 Background Removal Engine
@@ -127,7 +137,12 @@ class BackgroundRemovalManager:
 
 **Lazy Loading Implementation**: Models are loaded on-demand to minimize memory footprint and application startup time. The system maintains session objects for loaded models, enabling efficient reuse without reinitialization overhead.
 
-**Memory Management**: Automatic garbage collection and session cleanup prevent memory leaks during extended usage sessions.
+**Memory Management**: Advanced memory optimization strategies prevent memory overflow and ensure stable operation:
+
+1. **Dynamic Model Loading**: Only one AI model is loaded at a time, with automatic cleanup of unused models
+2. **Automatic Garbage Collection**: Explicit cleanup of model sessions and temporary data structures
+3. **Writable Model Directories**: Support for pre-bundled models and configurable storage paths
+4. **Session State Optimization**: Efficient management of Streamlit session state to prevent memory bloat
 
 #### 3.2.2 AI Model Specifications
 
@@ -349,9 +364,59 @@ The `PreviewManager` implements three quality modes balancing performance with v
 - Multiple format export for cross-platform usage
 - Brand-consistent background replacement
 
-## 6. Implementation Details
+## 6. Deployment Architecture
 
-### 6.1 Technology Stack
+### 6.1 Cloud-Optimized Configuration
+
+ImageGlitch implements a comprehensive deployment strategy optimized for cloud platforms and containerized environments:
+
+**Configuration Files**:
+- **runtime.txt**: Specifies Python 3.9.18 for maximum package compatibility
+- **packages.txt**: System dependencies for OpenCV and image processing libraries
+- **.streamlit/config.toml**: Streamlit-specific deployment optimizations
+- **requirements.txt**: Pinned package versions for consistent deployment
+
+**Deployment Optimizations**:
+1. **Memory Management**: Dynamic model loading prevents memory overflow in constrained environments
+2. **System Dependencies**: Pre-configured system packages eliminate deployment conflicts
+3. **Error Recovery**: Enhanced logging and diagnostics for troubleshooting
+4. **Environment Detection**: Automatic adaptation to different deployment contexts
+
+### 6.2 Container and Platform Support
+
+**Supported Platforms**:
+- **Streamlit Cloud**: Native deployment with automatic configuration
+- **Docker**: Multi-stage builds with optimized image size
+- **Heroku**: Buildpack compatibility with system dependencies
+- **AWS/GCP/Azure**: Cloud platform deployment with scaling support
+
+**Container Optimization**:
+```dockerfile
+# Multi-stage build for minimal image size
+FROM python:3.9-slim as base
+# System dependencies installation
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx libglib2.0-0 libsm6 \
+    libxext6 libxrender-dev libgomp1
+```
+
+### 6.3 Performance and Scalability
+
+**Cloud Performance Features**:
+- **Lazy Initialization**: Models load only when required
+- **Session Persistence**: User state maintained across interactions
+- **Resource Monitoring**: Built-in monitoring for memory and CPU usage
+- **Automatic Scaling**: Compatible with horizontal scaling strategies
+
+**Security Considerations**:
+- **Local Processing**: No data transmission to external servers
+- **Input Validation**: Comprehensive validation of uploaded content
+- **Resource Limits**: Configurable limits to prevent resource exhaustion
+- **Error Sanitization**: Secure error messages without sensitive information
+
+## 7. Implementation Details
+
+### 7.1 Technology Stack
 
 **Frontend Framework**: Streamlit 1.28+
 - Rapid prototyping capabilities
