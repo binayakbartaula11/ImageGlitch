@@ -1,10 +1,3 @@
-
----
-
-## 📚 Reading Material
-
-For a detailed account of the challenges and adventures faced during the deployment journey of ImageGlitch, check out this Medium post by the dev: [ImageGlitch: A Developer’s Journey Through Deployment Hell (And How I Survived It)](https://medium.com/@binayakbartaula/imageglitch-a-developers-journey-through-deployment-hell-and-how-i-survived-it-2b280ed9454c)
-
 # 🎨 ImageGlitch - AI-Powered Image Manipulation Suite
 
 [![Python](https://img.shields.io/badge/python-3.7+-blue.svg)](https://python.org)
@@ -38,6 +31,39 @@ For a detailed account of the challenges and adventures faced during the deploym
 - **Deployment Stability** - Enhanced error handling and logging for cloud environments
 - **Session State Management** - Suppressed redundant logging and efficient state persistence
 - **Garbage Collection** - Automatic cleanup of unused models and resources
+
+## 🚀 Quick Start
+
+### Installation
+
+1. **Clone the repository:**
+```bash
+git clone https://github.com/binayakbartaula11/ImageGlitch.git
+cd ImageGlitch
+```
+
+2. **Install dependencies:**
+```bash
+pip install -r requirements.txt
+```
+
+3. **For AI Background Removal (optional but recommended):**
+```bash
+pip install rembg
+```
+
+4. **For GPU acceleration (optional):**
+```bash
+pip install rembg[gpu]
+```
+
+### Launch the Application
+
+```bash
+streamlit run app.py
+```
+
+The application will open in your browser at `http://localhost:8501`
 
 ### Deployment Options
 
@@ -329,6 +355,10 @@ sudo apt-get install libgl1-mesa-glx libgl1 libglib2.0-0 libsm6 libxext6 libxren
 - **[🚀 Getting Started Guide](docs/getting-started.md)** - Quick setup and first steps
 - **[🌍 Deployment Guide](docs/deployment.md)** - Cloud, Docker, and platform deployment instructions
 - **[⚡ Optimization Guide](docs/optimization.md)** - Performance tuning and memory management
+
+## 📚 Reading Material
+
+For a detailed account of the challenges and adventures faced during the deployment journey of ImageGlitch, check out this Medium post by the dev: [ImageGlitch: A Developer's Journey Through Deployment Hell (And How I Survived It)](https://medium.com/@binayakbartaula/imageglitch-a-developers-journey-through-deployment-hell-and-how-i-survived-it-2b280ed9454c)
 
 ## 📧 Contact & Support
 
