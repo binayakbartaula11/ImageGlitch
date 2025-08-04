@@ -61,6 +61,16 @@ For deploying on cloud platforms, consider using a service such as AWS EC2, Hero
 
 5. **Preview and Save**: Visualize changes in real time and download the final result.
 
+## 📸 Example Screenshots
+
+Here are some screenshots demonstrating ImageGlitch’s core features and UI:
+
+| Custom Background Color                                  | White Background                                       | Image Glitch Effect (Mercedes 300SL)                   |
+| ------------------------------------------------------- | ----------------------------------------------------- | ------------------------------------------------------ |
+| ![Custom Background](../screenshots/background_removal_selected_bgcolor.png) | ![White Background](../screenshots/background_removal_selected_whitebackground.png) | ![Glitch Effect](../screenshots/mercedes-300-SL-imageglitch.png) |
+
+These images illustrate background removal with custom and white backgrounds, as well as the glitch effect output.
+
 ---
 
 *Next: [User Guide →](user-guide.md)*
