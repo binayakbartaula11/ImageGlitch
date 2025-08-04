@@ -1,2 +1,2 @@
-[runner]
-installMethod = "pip"
+# Streamlit configuration
+# Note: runner.installMethod is deprecated and has been removed
