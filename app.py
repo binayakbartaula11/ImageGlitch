@@ -60,7 +60,12 @@ try:
         
 except ImportError as import_error:
     print(f"❌ rembg import failed: {import_error}")
-    REMBG_ERROR_MESSAGE = f"Import failed: {str(import_error)}"
+    # Check for specific dependency issues
+    error_str = str(import_error).lower()
+    if 'numba' in error_str or 'llvmlite' in error_str:
+        REMBG_ERROR_MESSAGE = f"Python version incompatibility: {str(import_error)} (try Python 3.9)"
+    else:
+        REMBG_ERROR_MESSAGE = f"Import failed: {str(import_error)}"
     REMBG_AVAILABLE = False
     rembg_remove = None
     new_session = None
