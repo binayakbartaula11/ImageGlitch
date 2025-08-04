@@ -1,6 +1,7 @@
-streamlit>=1.28.0
-numpy>=2.0.0,<2.3.0
-opencv-python-headless>=4.12.0
-Pillow>=8.0.0
-rembg
-scipy>=1.7.0
+streamlit==1.47.1
+rembg==2.0.67
+numpy
+pillow
+opencv-python-headless
+scikit-image
+tqdm
