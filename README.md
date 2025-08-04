@@ -136,6 +136,10 @@ ImageGlitch/
 │   ├── api-reference.md   # Technical API documentation
 │   ├── faq.md             # FAQ and troubleshooting
 │   └── changelog.md       # Version history and updates
+├── screenshots/                                            # 📸 All visual assets and demo images
+│   ├── background_removal_selected_bgcolor.png             # Background removed with selected color
+│   ├── background_removal_selected_whitebackground.png     # Background removed with white
+│   ├── mercedes-300-SL-imageglitch.png                      # ImageGlitch output (Mercedes 300SL)
 └── README.md              # Main project overview
 ```
 
