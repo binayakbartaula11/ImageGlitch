@@ -15,6 +15,8 @@ Features:
 """
 
 import streamlit as st
+import os
+import gc
 import numpy as np
 import cv2
 from PIL import Image
@@ -38,50 +40,67 @@ REMBG_ERROR_MESSAGE = None
 rembg_remove = None
 new_session = None
 
-try:
-    # First, test basic rembg import
-    import rembg
-    print(f"✅ rembg imported successfully - version: {getattr(rembg, '__version__', 'unknown')}")
+# Initialize rembg with session state to prevent repeated logging
+if 'rembg_initialized' not in st.session_state:
+    st.session_state.rembg_initialized = True
     
-    # Test specific function imports
-    from rembg import remove as rembg_remove, new_session
-    print("✅ rembg functions imported successfully")
-    
-    # Test if we can create a basic session (this is where many deployments fail)
     try:
-        test_session = new_session('u2net')
-        print("✅ rembg model session test successful")
-        REMBG_AVAILABLE = True
-    except Exception as session_error:
-        print(f"❌ rembg model session failed: {session_error}")
-        REMBG_ERROR_MESSAGE = f"Model loading failed: {str(session_error)}"
-        # Keep functions available but flag the model issue
-        REMBG_AVAILABLE = False
+        # First, test basic rembg import
+        import rembg
+        print(f"✅ rembg imported successfully - version: {getattr(rembg, '__version__', 'unknown')}")
         
-except ImportError as import_error:
-    print(f"❌ rembg import failed: {import_error}")
-    # Check for specific dependency issues
-    error_str = str(import_error).lower()
-    if 'numba' in error_str or 'llvmlite' in error_str:
-        REMBG_ERROR_MESSAGE = f"Python version incompatibility: {str(import_error)} (try Python 3.9)"
-    else:
-        REMBG_ERROR_MESSAGE = f"Import failed: {str(import_error)}"
-    REMBG_AVAILABLE = False
-    rembg_remove = None
-    new_session = None
-except Exception as general_error:
-    print(f"❌ rembg general error: {general_error}")
-    REMBG_ERROR_MESSAGE = f"General error: {str(general_error)}"
-    REMBG_AVAILABLE = False
-    rembg_remove = None
-    new_session = None
-
-# Print final status for debugging
-if REMBG_AVAILABLE:
-    print("🎉 rembg is fully available and ready")
+        # Test specific function imports
+        from rembg import remove as rembg_remove, new_session
+        print("✅ rembg functions imported successfully")
+        
+        # Test if we can create a basic session (this is where many deployments fail)
+        try:
+            test_session = new_session('u2net')
+            print("✅ rembg model session test successful")
+            REMBG_AVAILABLE = True
+            print("🎉 rembg is fully available and ready")
+        except Exception as session_error:
+            print(f"❌ rembg model session failed: {session_error}")
+            REMBG_ERROR_MESSAGE = f"Model loading failed: {str(session_error)}"
+            # Keep functions available but flag the model issue
+            REMBG_AVAILABLE = False
+            
+    except ImportError as import_error:
+        print(f"❌ rembg import failed: {import_error}")
+        # Check for specific dependency issues
+        error_str = str(import_error).lower()
+        if 'numba' in error_str or 'llvmlite' in error_str:
+            REMBG_ERROR_MESSAGE = f"Python version incompatibility: {str(import_error)} (try Python 3.9)"
+        else:
+            REMBG_ERROR_MESSAGE = f"Import failed: {str(import_error)}"
+        REMBG_AVAILABLE = False
+        rembg_remove = None
+        new_session = None
+    except Exception as general_error:
+        print(f"❌ rembg general error: {general_error}")
+        REMBG_ERROR_MESSAGE = f"General error: {str(general_error)}"
+        REMBG_AVAILABLE = False
+        rembg_remove = None
+        new_session = None
+    
+    # Store the final status in session state
+    if not REMBG_AVAILABLE and REMBG_ERROR_MESSAGE:
+        print(f"❌ rembg is not available: {REMBG_ERROR_MESSAGE}")
 else:
-    print(f"❌ rembg is not available: {REMBG_ERROR_MESSAGE}")
+    # If already initialized, just import silently
+    try:
+        import rembg
+        from rembg import remove as rembg_remove, new_session
+        REMBG_AVAILABLE = True
+        REMBG_ERROR_MESSAGE = None
+    except:
+        REMBG_AVAILABLE = False
+        REMBG_ERROR_MESSAGE = "rembg not available"
+        rembg_remove = None
+        new_session = None
 
+
+os.environ["U2NET_HOME"] = "/tmp/u2net_models"
 
 class BackgroundRemovalManager:
     """Manages background removal functionality with proper error handling and model management.
@@ -92,7 +111,8 @@ class BackgroundRemovalManager:
     
     Key responsibilities:
     - Lazy-loading of AI models to minimize memory usage
-    - Session management for efficient model reuse
+        - Session management for efficient model reuse
+        - Supports pre-bundled model files
     - Consistent error handling and user feedback
     - Support for multiple output formats (transparent, white bg, custom color)
     """
@@ -156,14 +176,22 @@ class BackgroundRemovalManager:
             raise ImportError("rembg library is not available")
         
         # Check if model is already loaded - if not, load it
-        if model_name not in self.sessions:
-            try:
-                # Create a new session for this model
+        # Unload any previously loaded models to save memory
+        for loaded_model in list(self.sessions.keys()):
+            if loaded_model != model_name:
+                del self.sessions[loaded_model]
+
+        try:
+            # Create a new session for this model
+            model_path = f"models/{model_name}.onnx"  # Adjust the path if you have pre-bundled models
+            if os.path.exists(model_path):
+                self.sessions[model_name] = new_session(model_name=model_name, path=model_path)
+            else:
                 self.sessions[model_name] = new_session(model_name)
-                self.model_loaded[model_name] = True
-            except Exception as e:
-                # Provide detailed error information for troubleshooting
-                raise RuntimeError(f"Failed to load model '{model_name}': {str(e)}")
+            self.model_loaded[model_name] = True
+        except Exception as e:
+            # Provide detailed error information for troubleshooting
+            raise RuntimeError(f"Failed to load model '{model_name}': {str(e)}")
         
         return self.sessions[model_name]
     
